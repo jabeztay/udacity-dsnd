@@ -1,2 +1,5 @@
 .env
 .ipynb_checkpoints
+
+# disaster response project
+disaster_response_pipeline/models/classifier.pkl

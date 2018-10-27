@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 
+
 def load_data(messages_filepath, categories_filepath):
     '''
     Takes two csv files (messages and categories) and returns a merged
@@ -11,6 +12,7 @@ def load_data(messages_filepath, categories_filepath):
     categories = pd.read_csv(categories_filepath)
     df = pd.merge(messages, categories, how='inner', on='id')
     return df
+
 
 def clean_data(df):
     '''
@@ -22,7 +24,7 @@ def clean_data(df):
     row = categories.iloc[0, :]
     category_names = row.apply(lambda x: x[:-2])
     categories.columns = category_names
-    # 
+    
     for column in categories:
         categories[column] = categories[column].str[-1]
         categories[column] = categories[column].astype('int64')
@@ -40,6 +42,7 @@ def clean_data(df):
     assert(df['id'].duplicated().sum() == 0)
 
     return df
+
 
 def save_data(df, database_filename):
     '''
