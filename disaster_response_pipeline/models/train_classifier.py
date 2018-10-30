@@ -2,7 +2,7 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -40,13 +40,19 @@ def build_model():
     Returns a model pipeline
     '''
     pipeline = Pipeline([
-        ('vect', CountVectorizer(tokenizer=tokenize, ngram_range=(1, 2))),
+        ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(
-            RandomForestClassifier(random_state=42,
-                                   n_estimators=100, n_jobs=-1)))
+            RandomForestClassifier(random_state=42)))
     ])
-    return pipeline
+
+    param_grid = {
+        'vect__ngram_range': [(1, 1), (1, 2)],
+        'clf__estimator__n_estimators': [10, 50, 100]
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=param_grid)
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
