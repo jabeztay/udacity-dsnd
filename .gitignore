@@ -1,5 +1,6 @@
 .env
 .ipynb_checkpoints
+__pycache__
 
 # disaster response project
 disaster_response_pipeline/models/classifier.pkl
